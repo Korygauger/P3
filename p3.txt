@@ -1,0 +1,59 @@
+.TH Project 3 File Systems
+.SH NAME
+P3 File Systems
+.SH SYNOPSIS
+The purpose of this project was to simulate a file system useing our own code
+.SH DESCRIPTION
+.B loadWad()
+this function calls the constructor
+.B Wad()
+this is the constructor. it grabs the wad file from the path and first creates the root node and grabs the header of the wad file and storing the information in there. It then iterates through the descriptor list at the back of the wad file and creates nodes to store all of the data from there.
+
+.B getMagic()
+returns the magic which is stored in the ext variable and comes from the wad header
+
+.B isContent() isDirectory() getSize()
+all of these functions walk the tree from the root node down the file path that is provided. once they have the proper node they return the data that is wanted
+
+.B getContent()
+calls travel on the root node with the path. once the proper node is received it calculates how much data it needs to pull from the wad file then pulls that data using pread()
+
+.B createDirectory() createFile() writeToFile()
+all of these files calculate what offset they need to put there data, then they move all of the data after that offset by however large the data they are trying to write is. Then they write the data they have into the new gap that has formed
+
+.B FUSE
+for fuse I copied what Ernesto gave us in his youtube video [1]. I also used this link [2] to figure out how to use the functions that I needed. And then used this link [3] to further supplement that documentation
+
+.B getattr
+sets the attributes and permissions for reading and writing.
+
+.B mknod
+creates file by calling createFile()
+
+.B mkdir
+creates Directories by calling createDirectory()
+
+.B read
+calls the getContent function to read the data in a file
+
+.B write
+calls the writeToFile function to write to a file
+
+.B readdir
+retreives the members in a directory by calling the getDirectory function
+
+.SH BUGS
+I am no longer able to make a file or create a directory through the daemon. It worked earlier today but then it stopped working after I fixed something else. I did not change anything in particular in the functions that do those things though so it maybe a problem outside my daemon.
+
+.SH LINK
+https://youtu.be/ip9Ybj65EVI
+
+.SH REFERENCES
+[1] https://www.youtube.com/watch?v=Fnfflm3_9kw
+
+[2] https://engineering.facile.it/blog/eng/write-filesystem-fuse/
+
+[3] https://libfuse.github.io/doxygen/structfuse__operations.html#a272960bfd96a0100cbadc4e5a8886038
+
+.SH AUTHOR
+Kory Gauger
